@@ -27,6 +27,23 @@ public class Cat
     {
         Console.WriteLine("Meow");
     }
+
+    public void Meow(string text)
+    {
+        Console.WriteLine($"Meow {text}");
+    }
+
+    public bool Meow(int secondsOfDay)
+    {
+        if (secondsOfDay is <= 6 * 3600 or >= 18 * 3600)
+        {
+            return false;
+        }
+        
+        Meow();
+        return true;
+    }
+
     public void Eat()
     {
         Console.WriteLine("Eat");
