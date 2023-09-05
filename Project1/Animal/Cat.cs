@@ -8,6 +8,21 @@ public class Cat
     public int Age;
     public string Race;
     public bool IsStripe;
+
+    public Cat() : this("", "", "", 0, "", false)
+    {
+    }
+
+    public Cat(string name, string color, string gender, int age, string race, bool isStripe)
+    {
+        Name = name;
+        Color = color;
+        Gender = gender;
+        Age = age;
+        Race = race;
+        IsStripe = isStripe;
+    }
+
     public void Meow()
     {
         Console.WriteLine("Meow");
