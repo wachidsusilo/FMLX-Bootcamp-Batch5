@@ -3,9 +3,9 @@
 using Automotive;
 using Automotive.Part;
 
-static class Program
+internal static class Program
 {
-    static void Main()
+    private static void Main()
     {
         var jazz = new Car(
             "Honda",
