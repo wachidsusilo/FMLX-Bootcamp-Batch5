@@ -27,12 +27,12 @@ static class Program
         jazz.Engine?.Stop();        // Stopping the engine
         jazz.Engine?.Shutdown();    // Shutting down the engine
 
-        jazz.Lamp = new IncandescentLamp(); // Change the head lamp to Incandescent Lamp
-        jazz.Engine = new ElectricEngine(); // Change the engine to Electric Engine
+        jazz.Lamp = new IncandescentLamp();             // Change the head lamp to Incandescent Lamp
+        jazz.Engine = new ElectricEngine("Tesla"); // Change the engine to Electric Engine
         Console.WriteLine(jazz);
        
-        jazz.Lamp = new FluorescentLamp();  // Change the head lamp to Fluorescent Lamp
-        jazz.Engine = new DieselEngine();   // Change the engine to Diesel Engine
+        jazz.Lamp = new FluorescentLamp();                        // Change the head lamp to Fluorescent Lamp
+        jazz.Engine = new DieselEngine("Volvo", 10);   // Change the engine to Diesel Engine
         Console.WriteLine(jazz);
         
     }
