@@ -19,14 +19,26 @@ public class FooBar : IEnumerable
         _specifications = specs;
     }
 
-    public void SetCount(int count)
+    public bool SetCount(int count)
     {
+        if (count < 0)
+        {
+            return false;
+        }
+        
         _count = count;
+        return true;
     }
 
-    public void Add(int key, string value)
+    public bool Add(int key, string value)
     {
+        if (_specifications.ContainsKey(key))
+        {
+            return false;
+        }
+        
         _specifications.Add(key, value);
+        return true;
     }
 
     public bool Remove(int key)
@@ -43,7 +55,6 @@ public class FooBar : IEnumerable
         
         _specifications[key] = newValue;
         return true;
-
     }
 
     public bool Contains(int key)
