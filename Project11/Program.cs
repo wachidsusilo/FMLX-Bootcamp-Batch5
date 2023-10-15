@@ -1,3 +1,9 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿namespace Project11;
 
-Console.WriteLine("Hello, World!");
+internal static class Program
+{
+    private static void Main()
+    {
+        // var game = new ChessGame(new StandardBoard(), new Player(0, "white"), new Player(1, "black"));
+    }
+}
