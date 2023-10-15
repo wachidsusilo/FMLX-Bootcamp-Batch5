@@ -1,0 +1,561 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="Background" Color="#2e2e2e" />
+    <SolidColorBrush x:Key="BackgroundBar" Color="#2e2e2e" />
+    <SolidColorBrush x:Key="BackgroundBarSecondary" Color="#434343" />
+    <SolidColorBrush x:Key="BackgroundCard" Color="#262522" />
+    <SolidColorBrush x:Key="BackgroundCardSecondary" Color="#2a2926" />
+    <SolidColorBrush x:Key="BackgroundButton" Color="#32312f" />
+    <SolidColorBrush x:Key="BackgroundButtonSecondary" Color="#454441" />
+    <SolidColorBrush x:Key="BackgroundOverlay" Color="#802e2e2e" />
+
+    <SolidColorBrush x:Key="TextPrimary" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="TextDefault" Color="#c3c3c2" />
+    <SolidColorBrush x:Key="TextDisabled" Color="#747472" />
+
+    <SolidColorBrush x:Key="TileBlack" Color="#779954" />
+    <SolidColorBrush x:Key="TileWhite" Color="#e9edcc" />
+    <SolidColorBrush x:Key="TileMoveHint" Color="#1A000000" />
+    <SolidColorBrush x:Key="TileLastMove" Color="#80ffff33" />
+    <SolidColorBrush x:Key="TileHighlight" Color="#8000ccff" />
+    <SolidColorBrush x:Key="TileCheck" Color="#cceb6150" />
+
+    <Style x:Key="ButtonToolbarStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource BackgroundButton}" />
+        <Setter Property="Foreground" Value="{StaticResource TextDefault}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Border" CornerRadius="5" Background="{TemplateBinding Background}"
+                            BorderThickness="0.5" BorderBrush="#5e6162">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="Button.MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation From="#004e5152"
+                                                    To="#FF4e5152"
+                                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                    FillBehavior="HoldEnd"
+                                                    Duration="0:0:0.15" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Button.MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation To="#004e5152"
+                                                    From="#FF4e5152"
+                                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                    FillBehavior="HoldEnd"
+                                                    Duration="0:0:0.15" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonMinMaxStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource BackgroundBar}" />
+        <Setter Property="Foreground" Value="{StaticResource TextDefault}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="Button.MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation From="#2e2e2e"
+                                                    To="#434343"
+                                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                    FillBehavior="HoldEnd"
+                                                    Duration="0:0:0.15" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Button.MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation To="#2e2e2e"
+                                                    From="#434343"
+                                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                    FillBehavior="HoldEnd"
+                                                    Duration="0:0:0.15" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonCloseStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource BackgroundBar}" />
+        <Setter Property="Foreground" Value="{StaticResource TextDefault}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="Button.MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation From="#2e2e2e"
+                                                    To="#FFe81123"
+                                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                    FillBehavior="HoldEnd"
+                                                    Duration="0:0:0.15" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Button.MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation To="#2e2e2e"
+                                                    From="#FFe81123"
+                                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                    FillBehavior="HoldEnd"
+                                                    Duration="0:0:0.15" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonActionStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource BackgroundButton}" />
+        <Setter Property="Foreground" Value="{StaticResource TextDefault}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="4">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="Button.MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation From="#32312f"
+                                                    To="#454441"
+                                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                    FillBehavior="HoldEnd"
+                                                    Duration="0:0:0.15" />
+                                </Storyboard>
+                            </BeginStoryboard>
+
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation From="#c3c3c2"
+                                                    To="#FFFFFF"
+                                                    Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                                    FillBehavior="HoldEnd"
+                                                    Duration="0:0:0.15" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Button.MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation To="#32312f"
+                                                    From="#454441"
+                                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                    FillBehavior="HoldEnd"
+                                                    Duration="0:0:0.15" />
+                                </Storyboard>
+                            </BeginStoryboard>
+
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation To="#FFFFFF"
+                                                    From="#c3c3c2"
+                                                    Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                                    FillBehavior="HoldEnd"
+                                                    Duration="0:0:0.15" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonTextStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource BackgroundCard}" />
+        <Setter Property="Foreground" Value="{StaticResource TextDefault}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="4">
+                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="Button.MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation From="#262522"
+                                                    To="#32312f"
+                                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                    FillBehavior="HoldEnd"
+                                                    Duration="0:0:0.15" />
+                                </Storyboard>
+                            </BeginStoryboard>
+
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation From="#c3c3c2"
+                                                    To="#FFFFFF"
+                                                    Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                                    FillBehavior="HoldEnd"
+                                                    Duration="0:0:0.15" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Button.MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation To="#262522"
+                                                    From="#32312f"
+                                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                    FillBehavior="HoldEnd"
+                                                    Duration="0:0:0.15" />
+                                </Storyboard>
+                            </BeginStoryboard>
+
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation To="#FFFFFF"
+                                                    From="#c3c3c2"
+                                                    Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                                    FillBehavior="HoldEnd"
+                                                    Duration="0:0:0.15" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="LineDefaultStyle" TargetType="{x:Type Line}">
+        <Setter Property="Stroke" Value="{DynamicResource TextDefault}" />
+        <Style.Triggers>
+            <DataTrigger
+                Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                Value="True">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation From="#aaaaaa"
+                                            To="#fafafa"
+                                            Storyboard.TargetProperty="(Line.Stroke).(SolidColorBrush.Color)"
+                                            FillBehavior="HoldEnd"
+                                            Duration="0:0:0.15" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation To="#aaaaaa"
+                                            From="#fafafa"
+                                            Storyboard.TargetProperty="(Line.Stroke).(SolidColorBrush.Color)"
+                                            FillBehavior="HoldEnd"
+                                            Duration="0:0:0.15" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="PathDefaultVisibleStyle" TargetType="{x:Type Path}">
+        <Setter Property="Visibility" Value="Visible" />
+        <Setter Property="Fill" Value="{DynamicResource TextDefault}" />
+        <Style.Triggers>
+            <DataTrigger
+                Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                Value="True">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation From="#aaaaaa"
+                                            To="#fafafa"
+                                            Storyboard.TargetProperty="(Path.Fill).(SolidColorBrush.Color)"
+                                            FillBehavior="HoldEnd"
+                                            Duration="0:0:0.15" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation To="#aaaaaa"
+                                            From="#fafafa"
+                                            Storyboard.TargetProperty="(Path.Fill).(SolidColorBrush.Color)"
+                                            FillBehavior="HoldEnd"
+                                            Duration="0:0:0.15" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}"
+                         Value="Maximized">
+                <Setter Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}"
+                         Value="Normal">
+                <Setter Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="PathDefaultCollapsedStyle" TargetType="{x:Type Path}">
+        <Setter Property="Visibility" Value="Collapsed" />
+        <Setter Property="Fill" Value="{DynamicResource TextDefault}" />
+        <Style.Triggers>
+            <DataTrigger
+                Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                Value="True">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation From="#aaaaaa"
+                                            To="#fafafa"
+                                            Storyboard.TargetProperty="(Path.Fill).(SolidColorBrush.Color)"
+                                            FillBehavior="HoldEnd"
+                                            Duration="0:0:0.15" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation To="#aaaaaa"
+                                            From="#fafafa"
+                                            Storyboard.TargetProperty="(Path.Fill).(SolidColorBrush.Color)"
+                                            FillBehavior="HoldEnd"
+                                            Duration="0:0:0.15" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}"
+                         Value="Maximized">
+                <Setter Property="Visibility" Value="Visible" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}"
+                         Value="Normal">
+                <Setter Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="PathDefaultActionStyle" TargetType="{x:Type Path}">
+        <Setter Property="Fill" Value="{DynamicResource TextDefault}" />
+        <Style.Triggers>
+            <DataTrigger
+                Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                Value="True">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation From="#aaaaaa"
+                                            To="#fafafa"
+                                            Storyboard.TargetProperty="(Path.Fill).(SolidColorBrush.Color)"
+                                            FillBehavior="HoldEnd"
+                                            Duration="0:0:0.15" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation To="#aaaaaa"
+                                            From="#fafafa"
+                                            Storyboard.TargetProperty="(Path.Fill).(SolidColorBrush.Color)"
+                                            FillBehavior="HoldEnd"
+                                            Duration="0:0:0.15" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="PolygonDefaultStyle" TargetType="{x:Type Polygon}">
+        <Setter Property="Fill" Value="{DynamicResource TextDefault}" />
+        <Style.Triggers>
+            <DataTrigger
+                Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                Value="True">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation From="#aaaaaa"
+                                            To="#FAFAFA"
+                                            Storyboard.TargetProperty="(Polygon.Fill).(SolidColorBrush.Color)"
+                                            FillBehavior="HoldEnd"
+                                            Duration="0:0:0.15" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation To="#aaaaaa"
+                                            From="#FAFAFA"
+                                            Storyboard.TargetProperty="(Polygon.Fill).(SolidColorBrush.Color)"
+                                            FillBehavior="HoldEnd"
+                                            Duration="0:0:0.15" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+
+    <SolidColorBrush x:Key="TextBox.Static.Border" Color="Transparent" />
+    <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="Transparent" />
+    <SolidColorBrush x:Key="TextBox.Focus.Border" Color="Transparent" />
+    <Style TargetType="{x:Type TextBox}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="AllowDrop" Value="true" />
+        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst" />
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border x:Name="border" CornerRadius="4" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                        <ScrollViewer x:Name="PART_ContentHost" Focusable="false"
+                                      HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Opacity" TargetName="border" Value="0.56" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border"
+                                    Value="{StaticResource TextBox.MouseOver.Border}" />
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border"
+                                    Value="{StaticResource TextBox.Focus.Border}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true" />
+                    <Condition Property="IsSelectionActive" Value="false" />
+                </MultiTrigger.Conditions>
+                <Setter Property="SelectionBrush"
+                        Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}" />
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
+
+
+    <Style x:Key="ScrollThumbs" TargetType="{x:Type Thumb}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Grid x:Name="Grid">
+                        <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"
+                                   Fill="Transparent" />
+                        <Border x:Name="ScrollBarRectangle" CornerRadius="5" HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch" Width="Auto" Height="Auto"
+                                Background="{TemplateBinding Background}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Tag" Value="Horizontal">
+                            <Setter TargetName="ScrollBarRectangle" Property="Width" Value="Auto" />
+                            <Setter TargetName="ScrollBarRectangle" Property="Height" Value="7" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ScrollbarStyle" TargetType="{x:Type ScrollBar}">
+        <Setter Property="Margin" Value="-5,0,0,0" />
+        <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
+        <Setter Property="Foreground" Value="#FF8C8C8C" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Width" Value="8" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollBar}">
+                    <Grid x:Name="GridRoot" Width="8" Background="{TemplateBinding Background}">
+                        <Track x:Name="PART_Track" IsDirectionReversed="true" Focusable="false">
+                            <Track.Thumb>
+                                <Thumb x:Name="ScrollBarThumb" Background="{TemplateBinding Foreground}"
+                                       Style="{StaticResource ScrollThumbs}" />
+                            </Track.Thumb>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton x:Name="PageUp" Command="ScrollBar.PageDownCommand" Opacity="0"
+                                              Focusable="false" />
+                            </Track.IncreaseRepeatButton>
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton x:Name="PageDown" Command="ScrollBar.PageUpCommand" Opacity="0"
+                                              Focusable="false" />
+                            </Track.DecreaseRepeatButton>
+                        </Track>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter TargetName="ScrollBarThumb" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter TargetName="GridRoot" Property="LayoutTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="-90" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="PART_Track" Property="LayoutTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="-90" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Width" Value="Auto" />
+                            <Setter Property="Height" Value="8" />
+                            <Setter TargetName="ScrollBarThumb" Property="Tag" Value="Horizontal" />
+                            <Setter TargetName="PageDown" Property="Command" Value="ScrollBar.PageLeftCommand" />
+                            <Setter TargetName="PageUp" Property="Command" Value="ScrollBar.PageRightCommand" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+</ResourceDictionary>

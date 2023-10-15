@@ -1,0 +1,895 @@
+﻿<Window x:Class="Project12.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Project12"
+        xmlns:converter="clr-namespace:Project12.Converter"
+        mc:Ignorable="d"
+        SizeChanged="Window_SizeChanged"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource background_bar}"
+        MouseDown="Window_MouseDown"
+        Title="ESP Exception Decoder"
+        Height="622"
+        Width="860"
+        MinHeight="622"
+        MinWidth="860"
+        ResizeMode="CanResize"
+        UseLayoutRounding="True">
+
+    <Window.Resources>
+        <Style TargetType="{x:Type local:MainWindow}">
+            <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome GlassFrameThickness="1" ResizeBorderThickness="5" CaptionHeight="0"
+                                  UseAeroCaptionButtons="False" NonClientFrameEdges="Bottom" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <converter:TagConverter x:Key="TagConverter" />
+    </Window.Resources>
+
+    <Window.DataContext>
+        <local:MainViewModel />
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32px" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              Background="{DynamicResource BackgroundBar}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="145" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Image
+                Grid.Column="0"
+                Width="145px"
+                Height="18px"
+                Margin="12 0 6 0"
+                RenderOptions.EdgeMode="Aliased"
+                Source="/images/App.png" />
+
+            <StackPanel Grid.Column="1"
+                        Width="Auto"
+                        Height="Auto"
+                        Background="{DynamicResource BackgroundBar}"
+                        MouseLeftButtonDown="HeaderGrip_MouseLeftButtonDown"
+                        MouseMove="HeaderGrip_MouseMove" />
+
+            <StackPanel Grid.Column="2"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+
+                <Button Width="42px"
+                        Height="32px"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Style="{DynamicResource ButtonMinMaxStyle}"
+                        Click="BtnMinimize_Click">
+
+                    <Line Width="10"
+                          Height="1"
+                          X1="0"
+                          X2="10"
+                          Y1="0"
+                          Y2="0"
+                          StrokeThickness="1"
+                          RenderOptions.EdgeMode="Aliased"
+                          Style="{DynamicResource LineDefaultStyle}" />
+
+                </Button>
+
+                <Button Width="42px"
+                        Height="32px"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Style="{DynamicResource ButtonMinMaxStyle}"
+                        Click="BtnMaximize_Click">
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+
+                        <Path
+                            Data="M0.12 0l2.33 0 0 2.45 -2.45 0 0 -2.45 0.12 0zm2.09 0.24l-1.97 0 0 1.97 1.97 0 0 -1.97z"
+                            RenderTransformOrigin="0.5, 0.5"
+                            Style="{DynamicResource PathDefaultVisibleStyle}">
+
+                            <Path.RenderTransform>
+                                <ScaleTransform ScaleX="4" ScaleY="4" />
+                            </Path.RenderTransform>
+
+                        </Path>
+
+                        <Path
+                            Data="M0.09 0.37l0.28 0 0 -0.37 0.1 0 1.41 0 0 1.5 -0.38 0 0 0.37 -1.5 0 0 -1.5 0.09 0zm0.47 0l0.94 0 0 0.95 0.19 0 0 -1.14 -1.13 0 0 0.19zm0.76 0.18l-1.14 0 0 1.14 1.14 0 0 -1.14z"
+                            RenderTransformOrigin="0.5, 0.5"
+                            Style="{DynamicResource PathDefaultCollapsedStyle}">
+
+                            <Path.RenderTransform>
+                                <ScaleTransform ScaleX="5.3" ScaleY="5.3" />
+                            </Path.RenderTransform>
+
+                        </Path>
+
+                    </StackPanel>
+
+                </Button>
+
+                <Button Width="42px"
+                        Height="32px"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Style="{DynamicResource ButtonCloseStyle}"
+                        Click="BtnClose_Click">
+
+                    <Polygon
+                        Points="0,3.51 1.63,1.88 0,0.25 0.25,0 1.88,1.63 3.51,0 3.76,0.25 2.13,1.88 3.76,3.51 3.51,3.76 1.88,2.13 0.25,3.76 "
+                        RenderTransformOrigin="0.5,0.5"
+                        Style="{DynamicResource PolygonDefaultStyle}">
+
+                        <Polygon.RenderTransform>
+                            <ScaleTransform ScaleX="2.65" ScaleY="2.65" />
+                        </Polygon.RenderTransform>
+
+                    </Polygon>
+
+                </Button>
+
+
+            </StackPanel>
+
+        </Grid>
+
+        <Border Grid.Row="1"
+                BorderBrush="{DynamicResource Background}"
+                BorderThickness="0 1 0 0"
+                SizeChanged="Border_SizeChanged">
+
+            <Grid HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  Background="{DynamicResource Background}">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="200px" />
+                    <ColumnDefinition Width="{Binding BoardSize}" />
+                    <ColumnDefinition Width="*" MinWidth="200px" />
+                </Grid.ColumnDefinitions>
+
+                <Border Background="{DynamicResource BackgroundCard}"
+                        CornerRadius="10"
+                        Margin="8 16"
+                        Padding="0 8"
+                        Grid.Column="0">
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
+
+                        <ScrollViewer.Style>
+                            <Style TargetType="{x:Type ScrollViewer}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                                            <Grid x:Name="Grid" Background="{TemplateBinding Background}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <Rectangle x:Name="Corner" Grid.Column="1"
+                                                           Fill="Transparent"
+                                                           Grid.Row="1" />
+                                                <ScrollContentPresenter
+                                                    x:Name="PART_ScrollContentPresenter"
+                                                    CanHorizontallyScroll="False"
+                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                    CanVerticallyScroll="False" Grid.Column="0"
+                                                    Content="{TemplateBinding Content}"
+                                                    CanContentScroll="{TemplateBinding CanContentScroll}"
+                                                    Margin="{TemplateBinding Padding}" Grid.Row="0" />
+
+                                                <ScrollBar x:Name="PART_VerticalScrollBar"
+                                                           Foreground="{DynamicResource BackgroundBarSecondary}"
+                                                           AutomationProperties.AutomationId="VerticalScrollBar"
+                                                           Cursor="Arrow" Grid.Column="1"
+                                                           Maximum="{TemplateBinding ScrollableHeight}"
+                                                           Minimum="0"
+                                                           Grid.Row="0"
+                                                           Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                           ViewportSize="{TemplateBinding ViewportHeight}"
+                                                           Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                                           Style="{DynamicResource ScrollbarStyle}" />
+
+                                                <ScrollBar x:Name="PART_HorizontalScrollBar"
+                                                           Foreground="{DynamicResource BackgroundBarSecondary}"
+                                                           AutomationProperties.AutomationId="HorizontalScrollBar"
+                                                           Cursor="Arrow" Grid.Column="0"
+                                                           Maximum="{TemplateBinding ScrollableWidth}"
+                                                           Minimum="0"
+                                                           Orientation="Horizontal" Grid.Row="1"
+                                                           Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                           ViewportSize="{TemplateBinding ViewportWidth}"
+                                                           Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+                                                           Style="{DynamicResource ScrollbarStyle}" />
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ScrollViewer.Style>
+
+                        <ItemsControl ItemsSource="{Binding WhiteHistories}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+
+                                    <Button Margin="8 0 8 0"
+                                            Tag="{Binding Tag}"
+                                            Style="{StaticResource ButtonTextStyle}"
+                                            HorizontalAlignment="Stretch"
+                                            Click="ActionHistory_Click">
+
+                                        <Border HorizontalAlignment="Stretch"
+                                                CornerRadius="4">
+
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background" Value="Transparent" />
+
+                                                    <Style.Triggers>
+                                                        <DataTrigger Value="True">
+                                                            <DataTrigger.Binding>
+                                                                <MultiBinding Converter="{StaticResource TagConverter}">
+                                                                    <Binding
+                                                                        RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"
+                                                                        Path="DataContext.ActionPointerId" />
+                                                                    <Binding Path="Tag" />
+                                                                </MultiBinding>
+                                                            </DataTrigger.Binding>
+                                                            <DataTrigger.Setters>
+                                                                <Setter Property="Background"
+                                                                        Value="{DynamicResource BackgroundButton}" />
+                                                            </DataTrigger.Setters>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+
+                                            <StackPanel Orientation="Horizontal"
+                                                        HorizontalAlignment="Stretch"
+                                                        Margin="8 4">
+
+                                                <TextBlock Foreground="{DynamicResource TextDefault}"
+                                                           Text="{Binding Number}"
+                                                           FontWeight="Medium"
+                                                           FontSize="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.BoardFontSize}"
+                                                           Margin="4 0 0 0"
+                                                           MinWidth="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.NumberMinWidth}" />
+
+                                                <TextBlock Foreground="{DynamicResource TextDefault}"
+                                                           Text="{Binding Notation}"
+                                                           FontWeight="Medium"
+                                                           FontSize="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.BoardFontSize}" />
+
+                                            </StackPanel>
+
+                                        </Border>
+
+                                    </Button>
+
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                    </ScrollViewer>
+
+                </Border>
+
+                <Grid Margin="8 16"
+                      Grid.Column="1">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="{Binding BoardSize}" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Margin="10 8 10 0"
+                          VerticalAlignment="Top"
+                          Grid.Row="0">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0"
+                                VerticalAlignment="Bottom"
+                                Padding="16 0 16 0"
+                                CornerRadius="4"
+                                Height="40"
+                                Width="Auto"
+                                Background="{DynamicResource BackgroundCard}">
+
+                            <TextBlock Foreground="{DynamicResource TextPrimary}"
+                                       Text="{Binding GameStatus}"
+                                       FontWeight="Medium"
+                                       Height="Auto"
+                                       VerticalAlignment="Center"
+                                       FontSize="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.BoardFontSize}" />
+
+                        </Border>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    Margin="10 0 10 0"
+                                    Grid.Row="0">
+
+                            <Image Width="40"
+                                   Height="40"
+                                   VerticalAlignment="Top"
+                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                   Source="/Images/ProfileKoala.png" />
+
+                            <TextBlock Foreground="{DynamicResource TextPrimary}"
+                                       Text="{Binding PlayerWhite.Name}"
+                                       FontWeight="Medium"
+                                       FontSize="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.BoardFontSize}"
+                                       Margin="12 0 0 0" />
+
+                        </StackPanel>
+
+                    </Grid>
+
+                    <Canvas Grid.Row="1"
+                            x:Name="CanvasBoard"
+                            Margin="0 20 0 20"
+                            Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"
+                            SizeChanged="Canvas_SizeChanged"
+                            MouseMove="Tile_MouseMove">
+
+                        <Border Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}"
+                                Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}">
+
+                            <Border.Resources>
+                                <converter:YConverter x:Key="YConverter" />
+                            </Border.Resources>
+
+                            <ItemsControl ItemsSource="{Binding Tiles}">
+
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                        </Grid>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+
+                                        <Border Tag="{Binding Value.Tag}"
+                                                Background="{Binding Value.Background}"
+                                                CornerRadius="{Binding Value.CornerRadius}"
+                                                MouseLeftButtonDown="Tile_MouseLeftButtonDown"
+                                                MouseLeftButtonUp="Tile_MouseLeftButtonUp"
+                                                MouseRightButtonDown="Tile_MouseRightButtonDown">
+
+                                            <Canvas x:Name="Canvas">
+                                                <Border Width="{Binding ActualWidth, ElementName=Canvas }"
+                                                        Height="{Binding ActualHeight, ElementName=Canvas }"
+                                                        Background="{Binding Value.Overlay}"
+                                                        CornerRadius="{Binding Value.CornerRadius}" />
+
+                                                <Image Width="{Binding ActualWidth, ElementName=Canvas }"
+                                                       Height="{Binding ActualHeight, ElementName=Canvas }"
+                                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                                       Source="{Binding Value.ImageHint}" />
+
+                                                <TextBlock Foreground="{Binding Value.Foreground}"
+                                                           Text="{Binding Value.TopLeftText}"
+                                                           FontWeight="Bold"
+                                                           Margin="2 2 0 0"
+                                                           FontSize="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.BoardFontSize}"
+                                                           Canvas.Top="0"
+                                                           Canvas.Left="0" />
+
+                                                <TextBlock Foreground="{Binding Value.Foreground}"
+                                                           Text="{Binding Value.TopRightText}"
+                                                           FontWeight="Bold"
+                                                           Margin="0 2 2 0"
+                                                           FontSize="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.BoardFontSize}"
+                                                           Canvas.Top="0"
+                                                           Canvas.Right="0" />
+
+                                                <TextBlock Foreground="{Binding Value.Foreground}"
+                                                           Text="{Binding Value.BottomRightText}"
+                                                           FontWeight="Bold"
+                                                           Margin="0 0 2 2"
+                                                           FontSize="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.BoardFontSize}"
+                                                           Canvas.Bottom="0"
+                                                           Canvas.Right="0" />
+
+                                                <TextBlock Foreground="{Binding Value.Foreground}"
+                                                           Text="{Binding Value.BottomLeftText}"
+                                                           FontWeight="Bold"
+                                                           Margin="2 0 0 2"
+                                                           FontSize="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.BoardFontSize}"
+                                                           Canvas.Bottom="0"
+                                                           Canvas.Left="0" />
+
+                                                <Image Width="{Binding ActualWidth, ElementName=Canvas }"
+                                                       Height="{Binding ActualHeight, ElementName=Canvas }"
+                                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                                       Source="{Binding Value.Image}" />
+
+                                            </Canvas>
+
+                                        </Border>
+
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+
+                                <ItemsControl.ItemContainerStyle>
+                                    <Style>
+                                        <Style.Setters>
+                                            <Setter Property="Grid.Row"
+                                                    Value="{Binding Value.Y, Converter={StaticResource YConverter}}" />
+                                            <Setter Property="Grid.Column" Value="{Binding Value.X}" />
+                                        </Style.Setters>
+                                    </Style>
+                                </ItemsControl.ItemContainerStyle>
+                            </ItemsControl>
+
+                        </Border>
+
+                        <Border Width="{Binding TileSize}"
+                                Height="{Binding TileSize}"
+                                Visibility="{Binding MovableTileVisibility}"
+                                Canvas.Left="{Binding MovableTile.Position.X}"
+                                Canvas.Top="{Binding MovableTile.Position.Y}"
+                                MouseLeftButtonUp="Tile_MouseLeftButtonUp">
+                            
+                            <Image Width="{Binding TileSize}"
+                                   Height="{Binding TileSize}"
+                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                   Source="{Binding MovableTile.Image}" />
+
+                        </Border>
+                        
+                    </Canvas>
+
+                    <Grid Margin="10 0 10 8"
+                          Grid.Row="2">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Bottom"
+                                    Height="Auto"
+                                    Width="Auto">
+
+                            <Image Width="40"
+                                   Height="40"
+                                   VerticalAlignment="Bottom"
+                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                   Source="/Images/ProfileTiger.png" />
+
+                            <TextBlock Foreground="{DynamicResource TextPrimary}"
+                                       Text="{Binding PlayerBlack.Name}"
+                                       FontWeight="Medium"
+                                       FontSize="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.BoardFontSize}"
+                                       Margin="12 0 0 0" />
+
+                        </StackPanel>
+
+                        <Border Grid.Column="1"
+                                VerticalAlignment="Bottom"
+                                Padding="8 0 8 0"
+                                CornerRadius="4"
+                                Background="{DynamicResource BackgroundCard}">
+
+                            <StackPanel Orientation="Horizontal"
+                                        Height="40"
+                                        Width="Auto">
+
+                                <Button Width="40"
+                                        Height="28"
+                                        Style="{DynamicResource ButtonActionStyle}"
+                                        Click="Undo_Click">
+
+                                    <Path
+                                        Data="M0.04 1.44l0.3 -0.3 1.1 -1.1c0.05,-0.05 0.14,-0.05 0.2,0l0.3 0.3c0.05,0.05 0.05,0.14 0,0.2l-1 1 1 1c0.05,0.05 0.05,0.14 0,0.2l-0.3 0.3c-0.05,0.05 -0.14,0.05 -0.2,0l-1.1 -1.1 -0.3 -0.3c-0.05,-0.05 -0.05,-0.14 0,-0.2z"
+                                        RenderTransformOrigin="0.5, 0.5"
+                                        Style="{DynamicResource PathDefaultActionStyle}">
+
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="4" ScaleY="4" />
+                                        </Path.RenderTransform>
+
+                                    </Path>
+
+                                </Button>
+
+                                <Button Width="40"
+                                        Height="28"
+                                        Margin="8 0 0 0"
+                                        Style="{DynamicResource ButtonActionStyle}"
+                                        Click="Redo_Click">
+
+                                    <Path
+                                        Data="M2.07 1.75l-0.32 0.32 -1.18 1.17c-0.06,0.06 -0.15,0.06 -0.21,0l-0.32 -0.32c-0.06,-0.06 -0.06,-0.15 0,-0.21l1.07 -1.07 -1.07 -1.07c-0.06,-0.06 -0.06,-0.15 0,-0.21l0.32 -0.32c0.06,-0.06 0.15,-0.06 0.21,0l1.18 1.17 0.32 0.32c0.06,0.06 0.06,0.15 0,0.21z"
+                                        RenderTransformOrigin="0.5, 0.5"
+                                        Style="{DynamicResource PathDefaultActionStyle}">
+
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="4" ScaleY="4" />
+                                        </Path.RenderTransform>
+
+                                    </Path>
+
+                                </Button>
+
+                                <Button Width="40"
+                                        Height="28"
+                                        Margin="8 0 0 0"
+                                        Style="{DynamicResource ButtonActionStyle}"
+                                        Click="Reset_Click">
+
+                                    <Path
+                                        Data="M2.26 5.04c-0.31,0 -0.61,-0.06 -0.88,-0.18 -0.27,-0.12 -0.51,-0.28 -0.72,-0.48 -0.2,-0.2 -0.36,-0.44 -0.48,-0.72 -0.12,-0.27 -0.18,-0.57 -0.18,-0.87 0,-0.1 0.03,-0.18 0.11,-0.25 0.07,-0.07 0.15,-0.11 0.25,-0.11 0.1,0 0.18,0.04 0.25,0.11 0.07,0.07 0.11,0.15 0.11,0.25 0,0.42 0.15,0.78 0.45,1.08 0.3,0.3 0.66,0.45 1.09,0.45 0.42,0 0.78,-0.15 1.09,-0.45 0.3,-0.3 0.45,-0.66 0.45,-1.09 0,-0.42 -0.15,-0.78 -0.46,-1.08 -0.3,-0.3 -0.67,-0.45 -1.09,-0.45l-0.04 0 0.08 0.08c0.05,0.05 0.08,0.12 0.08,0.19 0,0.07 -0.02,0.14 -0.08,0.19 -0.05,0.05 -0.12,0.08 -0.19,0.08 -0.08,-0 -0.14,-0.03 -0.19,-0.08l-0.55 -0.55c-0.07,-0.07 -0.11,-0.16 -0.11,-0.25 0,-0.1 0.04,-0.18 0.11,-0.26l0.55 -0.55c0.05,-0.05 0.12,-0.08 0.19,-0.08 0.07,-0 0.14,0.03 0.19,0.08 0.05,0.05 0.08,0.12 0.08,0.19 -0,0.07 -0.03,0.14 -0.09,0.19l-0.07 0.07 0.04 0c0.31,0 0.61,0.06 0.88,0.18 0.27,0.12 0.51,0.28 0.72,0.48 0.21,0.2 0.37,0.44 0.49,0.71 0.12,0.27 0.18,0.56 0.18,0.88 0,0.31 -0.06,0.61 -0.18,0.88 -0.12,0.27 -0.28,0.51 -0.48,0.72 -0.2,0.2 -0.44,0.36 -0.72,0.48 -0.27,0.12 -0.57,0.18 -0.88,0.18z"
+                                        RenderTransformOrigin="0.5, 0.5"
+                                        Style="{DynamicResource PathDefaultActionStyle}">
+
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="3" ScaleY="3" />
+                                        </Path.RenderTransform>
+
+                                    </Path>
+
+                                </Button>
+
+                            </StackPanel>
+
+                        </Border>
+
+                    </Grid>
+
+                </Grid>
+
+                <Border Background="{DynamicResource BackgroundCard}"
+                        CornerRadius="10"
+                        Margin="8 16"
+                        Padding="0 8"
+                        Grid.Column="2">
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
+
+                        <ScrollViewer.Style>
+                            <Style TargetType="{x:Type ScrollViewer}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                                            <Grid x:Name="Grid" Background="{TemplateBinding Background}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <Rectangle x:Name="Corner" Grid.Column="1"
+                                                           Fill="Transparent"
+                                                           Grid.Row="1" />
+                                                <ScrollContentPresenter
+                                                    x:Name="PART_ScrollContentPresenter"
+                                                    CanHorizontallyScroll="False"
+                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                    CanVerticallyScroll="False" Grid.Column="0"
+                                                    Content="{TemplateBinding Content}"
+                                                    CanContentScroll="{TemplateBinding CanContentScroll}"
+                                                    Margin="{TemplateBinding Padding}" Grid.Row="0" />
+
+                                                <ScrollBar x:Name="PART_VerticalScrollBar"
+                                                           Foreground="{DynamicResource BackgroundBarSecondary}"
+                                                           AutomationProperties.AutomationId="VerticalScrollBar"
+                                                           Cursor="Arrow" Grid.Column="1"
+                                                           Maximum="{TemplateBinding ScrollableHeight}"
+                                                           Minimum="0"
+                                                           Grid.Row="0"
+                                                           Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                           ViewportSize="{TemplateBinding ViewportHeight}"
+                                                           Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                                           Style="{DynamicResource ScrollbarStyle}" />
+
+                                                <ScrollBar x:Name="PART_HorizontalScrollBar"
+                                                           Foreground="{DynamicResource BackgroundBarSecondary}"
+                                                           AutomationProperties.AutomationId="HorizontalScrollBar"
+                                                           Cursor="Arrow" Grid.Column="0"
+                                                           Maximum="{TemplateBinding ScrollableWidth}"
+                                                           Minimum="0"
+                                                           Orientation="Horizontal" Grid.Row="1"
+                                                           Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                           ViewportSize="{TemplateBinding ViewportWidth}"
+                                                           Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+                                                           Style="{DynamicResource ScrollbarStyle}" />
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ScrollViewer.Style>
+
+                        <ItemsControl ItemsSource="{Binding BlackHistories}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+
+                                    <Button Margin="8 0 8 0"
+                                            Tag="{Binding Tag}"
+                                            Style="{StaticResource ButtonTextStyle}"
+                                            HorizontalAlignment="Stretch"
+                                            Click="ActionHistory_Click">
+
+                                        <Border HorizontalAlignment="Stretch"
+                                                CornerRadius="4">
+
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background" Value="Transparent" />
+
+                                                    <Style.Triggers>
+                                                        <DataTrigger Value="True">
+                                                            <DataTrigger.Binding>
+                                                                <MultiBinding Converter="{StaticResource TagConverter}">
+                                                                    <Binding
+                                                                        RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"
+                                                                        Path="DataContext.ActionPointerId" />
+                                                                    <Binding Path="Tag" />
+                                                                </MultiBinding>
+                                                            </DataTrigger.Binding>
+                                                            <DataTrigger.Setters>
+                                                                <Setter Property="Background"
+                                                                        Value="{DynamicResource BackgroundButton}" />
+                                                            </DataTrigger.Setters>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+
+                                            <StackPanel Orientation="Horizontal"
+                                                        HorizontalAlignment="Stretch"
+                                                        Margin="8 4">
+
+                                                <TextBlock Foreground="{DynamicResource TextDefault}"
+                                                           Text="{Binding Number}"
+                                                           FontWeight="Medium"
+                                                           FontSize="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.BoardFontSize}"
+                                                           Margin="4 0 0 0"
+                                                           MinWidth="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.NumberMinWidth}" />
+
+                                                <TextBlock Foreground="{DynamicResource TextDefault}"
+                                                           Text="{Binding Notation}"
+                                                           FontWeight="Medium"
+                                                           FontSize="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.BoardFontSize}" />
+
+                                            </StackPanel>
+
+                                        </Border>
+
+                                    </Button>
+
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                    </ScrollViewer>
+
+                </Border>
+
+            </Grid>
+
+        </Border>
+
+        <Border Grid.Row="1"
+                Background="{DynamicResource BackgroundOverlay}"
+                Visibility="{Binding PromotionCardVisibility}">
+
+            <Border HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="{Binding PromotionCardWidth}"
+                    Height="{Binding PromotionCardHeight}"
+                    Background="{DynamicResource BackgroundCard}"
+                    CornerRadius="10">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Foreground="{DynamicResource TextPrimary}"
+                               Text="Choose Piece"
+                               FontWeight="Medium"
+                               HorizontalAlignment="Center"
+                               Margin="0 10 0 10"
+                               FontSize="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.BoardFontSize}" />
+
+                    <Grid Grid.Row="1">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0"
+                                Tag="Q"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Margin="{Binding PromotionCardContentMargin}"
+                                Style="{DynamicResource ButtonActionStyle}"
+                                Click="Promotion_Click">
+
+                            <Image Stretch="Fill"
+                                   Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
+                                   RenderOptions.BitmapScalingMode="HighQuality">
+
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Setter Property="Source" Value="/Images/WhiteQueen.png" />
+
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CurrentTurn}" Value="White">
+                                                <Setter Property="Source" Value="/Images/BlackQueen.png" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+
+                            </Image>
+
+                        </Button>
+
+                        <Button Grid.Column="1"
+                                Tag="R"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Margin="{Binding PromotionCardContentMargin}"
+                                Style="{DynamicResource ButtonActionStyle}"
+                                Click="Promotion_Click">
+
+                            <Image Stretch="Fill"
+                                   Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
+                                   RenderOptions.BitmapScalingMode="HighQuality">
+
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Setter Property="Source" Value="/Images/WhiteRook.png" />
+
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CurrentTurn}" Value="White">
+                                                <Setter Property="Source" Value="/Images/BlackRook.png" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+
+                            </Image>
+
+                        </Button>
+
+                        <Button Grid.Column="2"
+                                Tag="B"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Margin="{Binding PromotionCardContentMargin}"
+                                Style="{DynamicResource ButtonActionStyle}"
+                                Click="Promotion_Click">
+
+                            <Image Stretch="Fill"
+                                   Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
+                                   RenderOptions.BitmapScalingMode="HighQuality">
+
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Setter Property="Source" Value="/Images/WhiteBishop.png" />
+
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CurrentTurn}" Value="White">
+                                                <Setter Property="Source" Value="/Images/BlackBishop.png" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+
+                            </Image>
+
+                        </Button>
+
+                        <Button Grid.Column="3"
+                                Tag="N"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Margin="{Binding PromotionCardContentMarginEnd}"
+                                Style="{DynamicResource ButtonActionStyle}"
+                                Click="Promotion_Click">
+
+                            <Image Stretch="Fill"
+                                   Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
+                                   RenderOptions.BitmapScalingMode="HighQuality">
+
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Setter Property="Source" Value="/Images/WhiteKnight.png" />
+
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CurrentTurn}" Value="White">
+                                                <Setter Property="Source" Value="/Images/BlackKnight.png" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+
+                            </Image>
+
+                        </Button>
+
+                    </Grid>
+
+                </Grid>
+
+            </Border>
+
+        </Border>
+
+    </Grid>
+</Window>
