@@ -1,0 +1,111 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+        <UseWindowsForms>True</UseWindowsForms>
+        <ApplicationIcon>Images/App.ico</ApplicationIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove="Images\App.ico"/>
+        <Content Include="Images\App.ico">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\App.png"/>
+        <Content Include="Images\App.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\BlackBishop.png"/>
+        <Content Include="Images\BlackBishop.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\BlackKing.png"/>
+        <Content Include="Images\BlackKing.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\BlackKnight.png"/>
+        <Content Include="Images\BlackKnight.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\BlackPawn.png"/>
+        <Content Include="Images\BlackPawn.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\BlackQueen.png"/>
+        <Content Include="Images\BlackQueen.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\BlackRook.png"/>
+        <Content Include="Images\BlackRook.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\WhiteBishop.png"/>
+        <Content Include="Images\WhiteBishop.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\WhiteKing.png"/>
+        <Content Include="Images\WhiteKing.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\WhiteKnight.png"/>
+        <Content Include="Images\WhiteKnight.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\WhitePawn.png"/>
+        <Content Include="Images\WhitePawn.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\WhiteQueen.png"/>
+        <Content Include="Images\WhiteQueen.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\WhiteRook.png"/>
+        <Content Include="Images\WhiteRook.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\ProfileKoala.png" />
+        <Content Include="Images\ProfileKoala.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\ProfileTiger.png" />
+        <Content Include="Images\ProfileTiger.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\CaptureHint.png" />
+        <Content Include="Images\CaptureHint.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Images\MoveHint.png" />
+        <Content Include="Images\MoveHint.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Sounds\Capture.mp3" />
+        <Content Include="Sounds\Capture.mp3">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Sounds\MoveCheck.mp3" />
+        <Content Include="Sounds\MoveCheck.mp3">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Sounds\MoveSelf.mp3" />
+        <Content Include="Sounds\MoveSelf.mp3">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Sounds\Notify.mp3" />
+        <Content Include="Sounds\Notify.mp3">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Sounds\Promote.mp3" />
+        <Content Include="Sounds\Promote.mp3">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Project11\Project11.csproj" />
+    </ItemGroup>
+
+</Project>
