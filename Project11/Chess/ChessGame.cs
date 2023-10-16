@@ -13,17 +13,17 @@ public class ChessGame
     private readonly Dictionary<string, int> _snapshots;
     private readonly Board _board;
     private int _fiftyRuleCount;
-    
+
     /// <summary>
     /// Get the current status of the game.
     /// </summary>
     public GameStatus GameStatus { get; private set; }
-    
+
     /// <summary>
     /// Get the current <see cref="PieceColor"/> turn.
     /// </summary>
     public PieceColor CurrentTurn { get; private set; }
-    
+
     /// <summary>
     /// Get or set the last successfully executed <see cref="ChessAction"/>. This instance doesn't
     /// necessarily be equal to the last <see cref="ChessAction"/> in the game's history. For example,
@@ -33,7 +33,7 @@ public class ChessGame
     /// to <see cref="ActionPointerId"/>.
     /// </summary>
     public ChessAction? LastAction { get; private set; }
-    
+
     /// <summary>
     /// Get or set the <see cref="ChessAction.Id"/> of the <see cref="ChessAction"/> the game is
     /// currently pointing to. Normally the value of this instance should be equal to <see cref="ActionCount"/> - 1,
@@ -41,17 +41,17 @@ public class ChessGame
     /// in the game's history.
     /// </summary>
     public int ActionPointerId { get; private set; }
-    
+
     /// <summary>
     /// Get the number of <see cref="ChessAction"/> stored in the game's history.
     /// </summary>
     public int ActionCount => _actions[PieceColor.White].Count + _actions[PieceColor.Black].Count;
-    
+
     /// <summary>
     /// Get the <see cref="Board.Width"/> of the <see cref="Board"/> owned by this instance.
     /// </summary>
     public int BoardWidth => _board.Width;
-    
+
     /// <summary>
     /// Get the <see cref="Board.Height"/> of the <see cref="Board"/> owned by this instance.
     /// </summary>
@@ -61,17 +61,17 @@ public class ChessGame
     /// Occurs when a <see cref="Piece"/> has moved from one <see cref="Position"/> to another.
     /// </summary>
     public event Action<Piece, Move, bool>? PieceMoved;
-    
+
     /// <summary>
     /// Occurs when a <see cref="King"/> has checked by another <see cref="Piece"/>.
     /// </summary>
     public event Action<King, List<Piece>>? Checked;
-    
+
     /// <summary>
     /// Occurs when the game ends, either it was caused by a checkmate or a draw.
     /// </summary>
     public event Action<GameResult>? GameOver;
-    
+
     /// <summary>
     /// Occurs when a <see cref="Pawn"/> reaches the far most opposite side of the board.
     /// For <see cref="StandardBoard"/>, the <see cref="Position.Y"/> value will be equal to 7
@@ -81,38 +81,38 @@ public class ChessGame
     /// call <see cref="PromotePawn"/> to promote the <see cref="Pawn"/> manually.
     /// </summary>
     public event Action<Pawn>? PawnPromotion;
-    
+
     /// <summary>
     /// Occurs when a <see cref="Piece"/> has been updated. This even is called after a <see cref="Pawn"/>
     /// got promoted.
     /// </summary>
     public event Action<Piece>? PieceUpdated;
-    
+
     /// <summary>
     /// Occurs when the <see cref="CurrentTurn"/> value has been changed.
     /// </summary>
     public event Action<PieceColor>? TurnChanged;
-    
+
     /// <summary>
     /// Occurs when a <see cref="ChessAction"/> has been added to the game's history.
     /// This event is called during a successful execution of <see cref="MovePiece"/>.
     /// </summary>
     public event Action<PieceColor, ChessAction>? ActionAdded;
-    
+
     /// <summary>
     /// Occurs when a <see cref="ChessAction"/> in the game's history has been updated.
     /// This event is called when there is a situation which changed the state of a <see cref="ChessAction"/>.
     /// For example, when a <see cref="Pawn"/> got promoted.
     /// </summary>
     public event Action<PieceColor, ChessAction>? ActionUpdated;
-    
+
     /// <summary>
     /// Occurs when a <see cref="ChessAction"/> has been removed from the game's history.
     /// This event is called when the game state was rolled back to a certain point in the game's history
     /// and the user called <see cref="MovePiece"/>.
     /// </summary>
     public event Action<PieceColor, ChessAction>? ActionRemoved;
-    
+
     /// <summary>
     /// Occurs when the <see cref="ActionPointerId"/> value has been changed.
     /// </summary>
@@ -476,7 +476,7 @@ public class ChessGame
                 .ToList();
         }
 
-        if (piece is King || !IsInCheck(CurrentTurn))
+        if (!IsInCheck(CurrentTurn))
         {
             return actions;
         }
@@ -484,9 +484,19 @@ public class ChessGame
         var king = _pieces[CurrentTurn].Find(p => p is King)!;
         var attackers = FindPiecesWhoCanAttack(king.Position, CurrentTurn.Inverse());
 
-        return attackers.Select(attacker => attacker is Knight
-                ? new List<Position> { attacker.Position }
-                : attacker.GetPathTo(king.Position).Where(pos => pos != king.Position).ToList())
+        if (piece is King)
+        {
+            return actions.Where(action =>
+                !attackers.Any(attacker =>
+                    attacker
+                        .GetPathTo(action.GetPrimaryMove().To)
+                        .Any(pos => pos == action.GetPrimaryMove().To))
+            ).ToList();
+        }
+
+        return attackers
+            .Select(attacker =>
+                attacker.GetPathTo(king.Position).Where(pos => pos != king.Position).ToList())
             .Aggregate(actions, (current, path) =>
                 current.Where(action => path.Exists(pos => pos == action.GetPrimaryMove().To)).ToList());
     }
