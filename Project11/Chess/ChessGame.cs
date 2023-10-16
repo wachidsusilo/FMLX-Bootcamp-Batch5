@@ -289,13 +289,9 @@ public class ChessGame
 
         var snapshot = GetSnapshot();
 
-        if (_snapshots.ContainsKey(snapshot))
+        if (!_snapshots.TryAdd(snapshot, 1))
         {
             _snapshots[snapshot] += 1;
-        }
-        else
-        {
-            _snapshots.Add(snapshot, 1);
         }
 
         if (_snapshots[snapshot] >= 3)
@@ -396,6 +392,13 @@ public class ChessGame
         var newPiece = CreatePiece(type, piece.Id, piece.Color, piece.Position);
         _pieces[piece.Color][index] = newPiece;
         PieceUpdated?.Invoke(newPiece);
+
+        var snapshot = GetSnapshot();
+
+        if (!_snapshots.TryAdd(snapshot, 1))
+        {
+            _snapshots[snapshot] += 1;
+        }
 
         if (LastAction is null)
         {
@@ -537,7 +540,7 @@ public class ChessGame
             if (isMovingBack)
             {
                 snapshot = GetSnapshot();
-                _snapshots[snapshot] -= 1;
+                _snapshots[snapshot] -= 1; 
             }
 
             if (piece.Color == PieceColor.Black)
