@@ -415,7 +415,7 @@ public class MainViewModel : INotifyPropertyChanged
             return;
         }
 
-        if (resetOriginalTile)
+        if (resetOriginalTile && _game.IsTileOccupied(tile.Position))
         {
             tile.SetImage(MovableTile.Image);
         }
