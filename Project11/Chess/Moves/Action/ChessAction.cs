@@ -43,9 +43,9 @@ public abstract class ChessAction
     }
 
     /// <summary>
-    /// Get <see cref="Move"/> instance which corresponds to <see cref="Piece"/> who makes this action.
+    /// Get <see cref="Move"/> instance which corresponds to a <see cref="Piece"/> who makes this action.
     /// </summary>
-    /// <returns>An instance of <see cref="Move"/> which corresponds to <see cref="Piece"/> who makes this action.</returns>
+    /// <returns>An instance of <see cref="Move"/> which corresponds to a <see cref="Piece"/> who makes this action.</returns>
     public abstract Move GetPrimaryMove();
 
     /// <summary>

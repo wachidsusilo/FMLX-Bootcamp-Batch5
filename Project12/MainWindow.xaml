@@ -28,6 +28,10 @@
             </Setter>
         </Style>
         <converter:TagConverter x:Key="TagConverter" />
+        <converter:LineXConverter x:Key="LineXConverter" />
+        <converter:LineYConverter x:Key="LineYConverter" />
+        <converter:HeadXConverter x:Key="HeadXConverter" />
+        <converter:HeadYConverter x:Key="HeadYConverter" />
     </Window.Resources>
 
     <Window.DataContext>
@@ -364,8 +368,9 @@
                             SizeChanged="Canvas_SizeChanged"
                             MouseMove="Tile_MouseMove">
 
-                        <Border Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}"
-                                Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}">
+                        <Border
+                            Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}"
+                            Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}">
 
                             <Border.Resources>
                                 <converter:YConverter x:Key="YConverter" />
@@ -408,7 +413,8 @@
                                                 CornerRadius="{Binding Value.CornerRadius}"
                                                 MouseLeftButtonDown="Tile_MouseLeftButtonDown"
                                                 MouseLeftButtonUp="Tile_MouseLeftButtonUp"
-                                                MouseRightButtonDown="Tile_MouseRightButtonDown">
+                                                MouseRightButtonDown="Tile_MouseRightButtonDown"
+                                                MouseRightButtonUp="Tile_MouseRightButtonUp">
 
                                             <Canvas x:Name="Canvas">
                                                 <Border Width="{Binding ActualWidth, ElementName=Canvas }"
@@ -478,20 +484,329 @@
 
                         </Border>
 
+                        <ItemsControl ItemsSource="{Binding Arrows}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Canvas IsHitTestVisible="False"
+                                            Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}"
+                                            Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+
+                                    <Canvas IsHitTestVisible="False"
+                                            Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}"
+                                            Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Canvas}}}">
+
+                                        <Line Stroke="{DynamicResource ArrowColor}"
+                                              StrokeStartLineCap="Round"
+                                              StrokeEndLineCap="Round"
+                                              StrokeThickness="{Binding DataContext.ArrowThickness, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                                              IsHitTestVisible="False">
+
+                                            <Line.X1>
+                                                <MultiBinding Converter="{StaticResource LineXConverter}">
+                                                    <Binding Path="DataContext.TileSize"
+                                                             RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                                    <Binding Path="Value.From" />
+                                                    <Binding Path="StrokeThickness"
+                                                             RelativeSource="{RelativeSource Self}" />
+                                                </MultiBinding>
+                                            </Line.X1>
+
+                                            <Line.Y1>
+                                                <MultiBinding Converter="{StaticResource LineYConverter}">
+                                                    <Binding Path="DataContext.TileSize"
+                                                             RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                                    <Binding Path="Value.From" />
+                                                    <Binding Path="StrokeThickness"
+                                                             RelativeSource="{RelativeSource Self}" />
+                                                </MultiBinding>
+                                            </Line.Y1>
+
+                                            <Line.X2>
+                                                <MultiBinding Converter="{StaticResource LineXConverter}">
+                                                    <Binding Path="DataContext.TileSize"
+                                                             RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                                    <Binding Path="Value.To" />
+                                                    <Binding Path="StrokeThickness"
+                                                             RelativeSource="{RelativeSource Self}" />
+                                                </MultiBinding>
+                                            </Line.X2>
+
+                                            <Line.Y2>
+                                                <MultiBinding Converter="{StaticResource LineYConverter}">
+                                                    <Binding Path="DataContext.TileSize"
+                                                             RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                                    <Binding Path="Value.To" />
+                                                    <Binding Path="StrokeThickness"
+                                                             RelativeSource="{RelativeSource Self}" />
+                                                </MultiBinding>
+                                            </Line.Y2>
+
+                                        </Line>
+
+                                        <Line Tag="135"
+                                              Stroke="{DynamicResource ArrowColor}"
+                                              StrokeStartLineCap="Round"
+                                              StrokeEndLineCap="Round"
+                                              StrokeThickness="{Binding DataContext.ArrowThickness, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                                              IsHitTestVisible="False">
+
+                                            <Line.X1>
+                                                <MultiBinding Converter="{StaticResource LineXConverter}">
+                                                    <Binding Path="DataContext.TileSize"
+                                                             RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                                    <Binding Path="Value.To" />
+                                                    <Binding Path="StrokeThickness"
+                                                             RelativeSource="{RelativeSource Self}" />
+                                                </MultiBinding>
+                                            </Line.X1>
+
+                                            <Line.Y1>
+                                                <MultiBinding Converter="{StaticResource LineYConverter}">
+                                                    <Binding Path="DataContext.TileSize"
+                                                             RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                                    <Binding Path="Value.To" />
+                                                    <Binding Path="StrokeThickness"
+                                                             RelativeSource="{RelativeSource Self}" />
+                                                </MultiBinding>
+                                            </Line.Y1>
+
+                                            <Line.X2>
+                                                <MultiBinding Converter="{StaticResource HeadXConverter}">
+                                                    <Binding Path="DataContext.TileSize"
+                                                             RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                                    <Binding Path="Value.From" />
+                                                    <Binding Path="Value.To" />
+                                                    <Binding Path="StrokeThickness"
+                                                             RelativeSource="{RelativeSource Self}" />
+                                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                                </MultiBinding>
+                                            </Line.X2>
+
+                                            <Line.Y2>
+                                                <MultiBinding Converter="{StaticResource HeadYConverter}">
+                                                    <Binding Path="DataContext.TileSize"
+                                                             RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                                    <Binding Path="Value.From" />
+                                                    <Binding Path="Value.To" />
+                                                    <Binding Path="StrokeThickness"
+                                                             RelativeSource="{RelativeSource Self}" />
+                                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                                </MultiBinding>
+                                            </Line.Y2>
+
+                                        </Line>
+
+                                        <Line Tag="225"
+                                              Stroke="{DynamicResource ArrowColor}"
+                                              StrokeStartLineCap="Round"
+                                              StrokeEndLineCap="Round"
+                                              StrokeThickness="{Binding DataContext.ArrowThickness, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                                              IsHitTestVisible="False">
+
+                                            <Line.X1>
+                                                <MultiBinding Converter="{StaticResource LineXConverter}">
+                                                    <Binding Path="DataContext.TileSize"
+                                                             RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                                    <Binding Path="Value.To" />
+                                                    <Binding Path="StrokeThickness"
+                                                             RelativeSource="{RelativeSource Self}" />
+                                                </MultiBinding>
+                                            </Line.X1>
+
+                                            <Line.Y1>
+                                                <MultiBinding Converter="{StaticResource LineYConverter}">
+                                                    <Binding Path="DataContext.TileSize"
+                                                             RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                                    <Binding Path="Value.To" />
+                                                    <Binding Path="StrokeThickness"
+                                                             RelativeSource="{RelativeSource Self}" />
+                                                </MultiBinding>
+                                            </Line.Y1>
+
+                                            <Line.X2>
+                                                <MultiBinding Converter="{StaticResource HeadXConverter}">
+                                                    <Binding Path="DataContext.TileSize"
+                                                             RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                                    <Binding Path="Value.From" />
+                                                    <Binding Path="Value.To" />
+                                                    <Binding Path="StrokeThickness"
+                                                             RelativeSource="{RelativeSource Self}" />
+                                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                                </MultiBinding>
+                                            </Line.X2>
+
+                                            <Line.Y2>
+                                                <MultiBinding Converter="{StaticResource HeadYConverter}">
+                                                    <Binding Path="DataContext.TileSize"
+                                                             RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                                    <Binding Path="Value.From" />
+                                                    <Binding Path="Value.To" />
+                                                    <Binding Path="StrokeThickness"
+                                                             RelativeSource="{RelativeSource Self}" />
+                                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                                </MultiBinding>
+                                            </Line.Y2>
+
+                                        </Line>
+
+                                    </Canvas>
+
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Line Visibility="{Binding ArrowPreviewVisibility}"
+                              Stroke="{DynamicResource ArrowColor}"
+                              StrokeStartLineCap="Round"
+                              StrokeEndLineCap="Round"
+                              StrokeThickness="{Binding DataContext.ArrowThickness, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                              IsHitTestVisible="False">
+
+                            <Line.X1>
+                                <MultiBinding Converter="{StaticResource LineXConverter}">
+                                    <Binding Path="TileSize" />
+                                    <Binding Path="ArrowPreview.From" />
+                                    <Binding Path="StrokeThickness" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Line.X1>
+
+                            <Line.Y1>
+                                <MultiBinding Converter="{StaticResource LineYConverter}">
+                                    <Binding Path="TileSize" />
+                                    <Binding Path="ArrowPreview.From" />
+                                    <Binding Path="StrokeThickness" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Line.Y1>
+
+                            <Line.X2>
+                                <MultiBinding Converter="{StaticResource LineXConverter}">
+                                    <Binding Path="TileSize" />
+                                    <Binding Path="ArrowPreview.To" />
+                                    <Binding Path="StrokeThickness" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Line.X2>
+
+                            <Line.Y2>
+                                <MultiBinding Converter="{StaticResource LineYConverter}">
+                                    <Binding Path="TileSize" />
+                                    <Binding Path="ArrowPreview.To" />
+                                    <Binding Path="StrokeThickness" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Line.Y2>
+
+                        </Line>
+
+                        <Line Visibility="{Binding ArrowPreviewVisibility}"
+                              Tag="135"
+                              Stroke="{DynamicResource ArrowColor}"
+                              StrokeStartLineCap="Round"
+                              StrokeEndLineCap="Round"
+                              StrokeThickness="{Binding DataContext.ArrowThickness, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                              IsHitTestVisible="False">
+
+                            <Line.X1>
+                                <MultiBinding Converter="{StaticResource LineXConverter}">
+                                    <Binding Path="TileSize" />
+                                    <Binding Path="ArrowPreview.To" />
+                                    <Binding Path="StrokeThickness" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Line.X1>
+
+                            <Line.Y1>
+                                <MultiBinding Converter="{StaticResource LineYConverter}">
+                                    <Binding Path="TileSize" />
+                                    <Binding Path="ArrowPreview.To" />
+                                    <Binding Path="StrokeThickness" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Line.Y1>
+
+                            <Line.X2>
+                                <MultiBinding Converter="{StaticResource HeadXConverter}">
+                                    <Binding Path="TileSize" />
+                                    <Binding Path="ArrowPreview.From" />
+                                    <Binding Path="ArrowPreview.To" />
+                                    <Binding Path="StrokeThickness" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Line.X2>
+
+                            <Line.Y2>
+                                <MultiBinding Converter="{StaticResource HeadYConverter}">
+                                    <Binding Path="TileSize" />
+                                    <Binding Path="ArrowPreview.From" />
+                                    <Binding Path="ArrowPreview.To" />
+                                    <Binding Path="StrokeThickness" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Line.Y2>
+
+                        </Line>
+
+                        <Line Visibility="{Binding ArrowPreviewVisibility}"
+                              Tag="225"
+                              Stroke="{DynamicResource ArrowColor}"
+                              StrokeStartLineCap="Round"
+                              StrokeEndLineCap="Round"
+                              StrokeThickness="{Binding DataContext.ArrowThickness, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                              IsHitTestVisible="False">
+
+                            <Line.X1>
+                                <MultiBinding Converter="{StaticResource LineXConverter}">
+                                    <Binding Path="TileSize" />
+                                    <Binding Path="ArrowPreview.To" />
+                                    <Binding Path="StrokeThickness" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Line.X1>
+
+                            <Line.Y1>
+                                <MultiBinding Converter="{StaticResource LineYConverter}">
+                                    <Binding Path="TileSize" />
+                                    <Binding Path="ArrowPreview.To" />
+                                    <Binding Path="StrokeThickness" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Line.Y1>
+
+                            <Line.X2>
+                                <MultiBinding Converter="{StaticResource HeadXConverter}">
+                                    <Binding Path="TileSize" />
+                                    <Binding Path="ArrowPreview.From" />
+                                    <Binding Path="ArrowPreview.To" />
+                                    <Binding Path="StrokeThickness" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Line.X2>
+
+                            <Line.Y2>
+                                <MultiBinding Converter="{StaticResource HeadYConverter}">
+                                    <Binding Path="TileSize" />
+                                    <Binding Path="ArrowPreview.From" />
+                                    <Binding Path="ArrowPreview.To" />
+                                    <Binding Path="StrokeThickness" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Line.Y2>
+
+                        </Line>
+
                         <Border Width="{Binding TileSize}"
                                 Height="{Binding TileSize}"
                                 Visibility="{Binding MovableTileVisibility}"
                                 Canvas.Left="{Binding MovableTile.Position.X}"
                                 Canvas.Top="{Binding MovableTile.Position.Y}"
-                                MouseLeftButtonUp="Tile_MouseLeftButtonUp">
-                            
+                                IsHitTestVisible="False">
+
                             <Image Width="{Binding TileSize}"
                                    Height="{Binding TileSize}"
                                    RenderOptions.BitmapScalingMode="HighQuality"
                                    Source="{Binding MovableTile.Image}" />
 
                         </Border>
-                        
+
                     </Canvas>
 
                     <Grid Margin="10 0 10 8"

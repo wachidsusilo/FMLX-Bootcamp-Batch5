@@ -21,17 +21,19 @@ public partial class MainWindow
     private double _cursorRelativeX;
     private double _cursorAbsoluteY;
     private bool _isDraggingTile;
+    private bool _isDraggingArrow;
     private string _draggedTileNotation;
-    
+
     private readonly MainViewModel _viewModel;
 
     public MainWindow()
     {
         InitializeComponent();
-        
+
         _viewModel = new MainViewModel();
         DataContext = _viewModel;
         _isDraggingTile = false;
+        _isDraggingArrow = false;
         _draggedTileNotation = "";
     }
 
@@ -41,25 +43,17 @@ public partial class MainWindow
         {
             return;
         }
-        
+
         var availableWidth = border.ActualWidth - 400;
         var availableHeight = border.ActualHeight - 128;
 
-        if (availableWidth > availableHeight)
-        {
-            _viewModel.BoardSize = (int)availableHeight;
-        }
-        else
-        {
-            _viewModel.BoardSize = (int)availableWidth;
-        }
-
+        _viewModel.BoardSize = availableWidth > availableHeight ? availableHeight : availableWidth;
         _viewModel.BoardFontSize = SystemFonts.MessageFontSize * _viewModel.BoardSize / 460;
         _viewModel.NumberMinWidth = 24 * _viewModel.BoardSize / 460;
         _viewModel.PromotionCardWidth = 400 * _viewModel.BoardSize / 460;
         _viewModel.PromotionCardHeight = 150 * _viewModel.BoardSize / 460;
-        _viewModel.TileSize = 53 * _viewModel.BoardSize / 460;
-
+        _viewModel.ArrowThickness = 8.0 * _viewModel.BoardSize / 460;
+        
         var margin = 10.0 * _viewModel.BoardSize / 460;
         _viewModel.PromotionCardContentMargin = new Thickness(margin, margin, margin / 2, margin);
         _viewModel.PromotionCardContentMarginEnd = new Thickness(margin / 2, margin, margin, margin);
@@ -71,8 +65,8 @@ public partial class MainWindow
         {
             return;
         }
-        
-        _viewModel.TileSize = (int)(canvas.ActualWidth / 8);
+
+        _viewModel.TileSize = canvas.ActualWidth / 8;
     }
 
     private void Tile_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -83,19 +77,20 @@ public partial class MainWindow
         }
 
         _viewModel.ClearTileHighlight();
-        
+        _viewModel.ClearArrows();
+
         if (_viewModel.IsGameOver)
         {
             return;
         }
-        
+
         var action = _viewModel.GetChessActionRelatedToTile(tag);
-        
+
         _viewModel.ClearTileHint();
 
         if (action is null)
         {
-            _viewModel.ShowTileHint(tag);   
+            _viewModel.ShowTileHint(tag);
         }
         else
         {
@@ -106,43 +101,57 @@ public partial class MainWindow
         {
             return;
         }
-        
+
         _draggedTileNotation = tag;
         _isDraggingTile = true;
     }
-    
+
     private void Tile_MouseMove(object sender, MouseEventArgs e)
     {
-        if (!_isDraggingTile)
+        var point = e.GetPosition(CanvasBoard);
+
+        if (_isDraggingTile)
+        {
+            var halfTileSize = _viewModel.TileSize / 2;
+            var x = point.X - halfTileSize;
+            var y = point.Y - halfTileSize;
+
+            _viewModel.MovableTile.Position = new Position((int)x, (int)y);
+            return;
+        }
+
+        if (!_isDraggingArrow)
         {
             return;
         }
-        
-        var point = e.GetPosition(CanvasBoard);
-        var halfTileSize = _viewModel.TileSize / 2;
-        var x = (int)point.X  - halfTileSize;
-        var y = (int)point.Y - halfTileSize;
 
-        _viewModel.MovableTile.Position = new Position(x, y);
+        _viewModel.ArrowPreview.To = new Position(
+            (int)Math.Min(Math.Floor(point.X / _viewModel.TileSize), 7),
+            (int)Math.Max(7 - Math.Floor((CanvasBoard.ActualHeight - point.Y) / _viewModel.TileSize), 0)
+        );
+        
+        _viewModel.ArrowPreviewVisibility = _viewModel.ArrowPreview.From == _viewModel.ArrowPreview.To
+            ? Visibility.Collapsed
+            : Visibility.Visible;
     }
-    
+
     private void Tile_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
         if (!_isDraggingTile || _viewModel.IsGameOver)
         {
             return;
         }
-        
-        var point =  e.GetPosition(CanvasBoard);
+
+        var point = e.GetPosition(CanvasBoard);
         var x = (int)Math.Floor(point.X / _viewModel.TileSize);
-        var y = (int)Math.Floor((CanvasBoard.ActualHeight -  point.Y) / _viewModel.TileSize);
+        var y = (int)Math.Floor((CanvasBoard.ActualHeight - point.Y) / _viewModel.TileSize);
         var position = new Position(x, y);
         var action = _viewModel.GetChessActionRelatedToTile(_viewModel.GetTileNotation(position));
         var draggedTileNotation = _draggedTileNotation;
 
         _isDraggingTile = false;
         _draggedTileNotation = "";
-        
+
         if (!_viewModel.ContainsTile(position) || action is null)
         {
             _viewModel.StopDraggingTile(draggedTileNotation);
@@ -155,11 +164,40 @@ public partial class MainWindow
 
     private void Tile_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
     {
-        if ((sender as Border)?.Tag is not string tag)
+        if (_isDraggingTile || _isDraggingArrow)
         {
             return;
         }
         
+        var point = e.GetPosition(CanvasBoard);
+        var x = (int)Math.Floor(point.X / _viewModel.TileSize);
+        var y = (int)Math.Floor((CanvasBoard.ActualHeight - point.Y) / _viewModel.TileSize);
+        var position = new Position(Math.Min(x, 7), Math.Max(7 - y, 0));
+
+        _isDraggingArrow = true;
+        _viewModel.ArrowPreview.From = position;
+        _viewModel.ArrowPreview.To = position;
+    }
+
+    private void Tile_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (_isDraggingArrow)
+        {
+            _isDraggingArrow = false;
+            _viewModel.ArrowPreviewVisibility = Visibility.Collapsed;
+
+            if (_viewModel.ArrowPreview.From != _viewModel.ArrowPreview.To)
+            {
+                _viewModel.AddArrow(_viewModel.ArrowPreview.From, _viewModel.ArrowPreview.To);
+                return;
+            }
+        }
+
+        if ((sender as Border)?.Tag is not string tag)
+        {
+            return;
+        }
+
         _viewModel.ToggleTileHighlight(tag);
     }
 
@@ -169,7 +207,7 @@ public partial class MainWindow
         {
             return;
         }
-        
+
         _viewModel.GoToAction(actionId);
     }
 
@@ -213,9 +251,9 @@ public partial class MainWindow
 
         _viewModel.PromotionCardVisibility = Visibility.Collapsed;
     }
-    
+
     #region Window Control Event Listeners
-    
+
     private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
     {
         BorderThickness = WindowState == WindowState.Maximized ? new Thickness(8) : new Thickness(0);
@@ -301,8 +339,8 @@ public partial class MainWindow
 
     #endregion
 
-    #region Window Configuration 
-    
+    #region Window Configuration
+
     protected override void OnSourceInitialized(EventArgs e)
     {
         base.OnSourceInitialized(e);
@@ -343,7 +381,6 @@ public partial class MainWindow
         }
     }
 
-
     #endregion
 
     #region Win32 API declarations to set and get window placement
@@ -358,5 +395,4 @@ public partial class MainWindow
     private const int SwShowMinimized = 2;
 
     #endregion
-
 }

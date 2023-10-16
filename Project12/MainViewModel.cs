@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using Project11.Chess;
 using Project11.Chess.Boards;
@@ -29,25 +30,29 @@ public class MainViewModel : INotifyPropertyChanged
 
     private int _pawnPromotionPieceId;
 
-    private int _boardSize;
-    private int _tileSize;
+    private double _boardSize;
+    private double _tileSize;
     private double _boardFontSize;
+    private double _arrowThickness;
     private string _gameStatus;
     private PieceColor _currentTurn;
     private string _actionPointerId;
-    private int _numberMinWidth;
-    private int _promotionCardWidth;
-    private int _promotionCardHeight;
+    private double _numberMinWidth;
+    private double _promotionCardWidth;
+    private double _promotionCardHeight;
     private Thickness _promotionCardContentMargin;
     private Thickness _promotionCardContentMarginEnd;
     private Visibility _promotionCardVisibility;
     private Visibility _movableTileVisibility;
+    private Visibility _arrowPreviewVisibility;
+    private Arrow _arrowPreview;
 
     public bool IsGameOver => _game.GameStatus == Project11.Chess.GameStatus.GameOver;
     public ObservableDictionary<string, Tile> Tiles { get; }
     public Tile MovableTile { get; }
     public ObservableCollection<ActionHistory> WhiteHistories { get; }
     public ObservableCollection<ActionHistory> BlackHistories { get; }
+    public ObservableDictionary<string, Arrow> Arrows { get; }
 
     public MainViewModel()
     {
@@ -67,6 +72,7 @@ public class MainViewModel : INotifyPropertyChanged
         _boardSize = 0;
         _tileSize = 0;
         _boardFontSize = SystemFonts.MessageFontSize;
+        _arrowThickness = 8;
         _gameStatus = "White Move";
         _currentTurn = PieceColor.White;
         _actionPointerId = "-1";
@@ -77,11 +83,14 @@ public class MainViewModel : INotifyPropertyChanged
         _promotionCardContentMarginEnd = new Thickness();
         _promotionCardVisibility = Visibility.Collapsed;
         _movableTileVisibility = Visibility.Collapsed;
+        _arrowPreviewVisibility = Visibility.Collapsed;
+        _arrowPreview = new Arrow(Position.None, Position.None);
 
         Tiles = new ObservableDictionary<string, Tile>();
         MovableTile = new Tile("mt", new Position(0, 0));
         WhiteHistories = new ObservableCollection<ActionHistory>();
         BlackHistories = new ObservableCollection<ActionHistory>();
+        Arrows = new ObservableDictionary<string, Arrow>();
 
         Reset();
     }
@@ -518,12 +527,6 @@ public class MainViewModel : INotifyPropertyChanged
 
         var actions = _game.GetPossibleActions(tile.Position);
 
-        // var piece = _game.FindPieceByPosition(tile.Position);
-
-        // Console.WriteLine(
-        //     $"[{_game.GetTileNotation(piece?.Position ?? Position.None)}][{piece?.GetType().Name}]: {string.Join(", ", actions.Select(action => action.GetType().Name))}"
-        // );
-
         foreach (var action in actions)
         {
             var notation = _game.GetTileNotation(action.GetPrimaryMove().To);
@@ -605,6 +608,29 @@ public class MainViewModel : INotifyPropertyChanged
         _checkNotations.Clear();
     }
 
+    public void AddArrow(Position from, Position to)
+    {
+        var key = new StringBuilder()
+            .Append(_game.GetTileNotation(from))
+            .Append(_game.GetTileNotation(to))
+            .ToString();
+        
+        if (from == to || Arrows.ContainsKey(key))
+        {
+            return;
+        }
+
+        Arrows.Add(key, new Arrow(from, to));
+    }
+
+    public void ClearArrows()
+    {
+        if (Arrows.Count > 0)
+        {
+            Arrows.Clear();   
+        }
+    }
+
     public Player PlayerWhite
     {
         get => _playerWhite;
@@ -617,13 +643,13 @@ public class MainViewModel : INotifyPropertyChanged
         set => SetField(ref _playerBlack, value);
     }
 
-    public int BoardSize
+    public double BoardSize
     {
         get => _boardSize;
         set => SetField(ref _boardSize, value);
     }
 
-    public int TileSize
+    public double TileSize
     {
         get => _tileSize;
         set => SetField(ref _tileSize, value);
@@ -633,6 +659,12 @@ public class MainViewModel : INotifyPropertyChanged
     {
         get => _boardFontSize;
         set => SetField(ref _boardFontSize, value);
+    }
+
+    public double ArrowThickness
+    {
+        get => _arrowThickness;
+        set => SetField(ref _arrowThickness, value);
     }
 
     public string GameStatus
@@ -653,19 +685,19 @@ public class MainViewModel : INotifyPropertyChanged
         set => SetField(ref _actionPointerId,  value);
     }
 
-    public int NumberMinWidth
+    public double NumberMinWidth
     {
         get => _numberMinWidth;
         set => SetField(ref _numberMinWidth, value);
     }
 
-    public int PromotionCardWidth
+    public double PromotionCardWidth
     {
         get => _promotionCardWidth;
         set => SetField(ref _promotionCardWidth, value);
     }
 
-    public int PromotionCardHeight
+    public double PromotionCardHeight
     {
         get => _promotionCardHeight;
         set => SetField(ref _promotionCardHeight, value);
@@ -693,6 +725,18 @@ public class MainViewModel : INotifyPropertyChanged
     {
         get => _movableTileVisibility;
         set => SetField(ref _movableTileVisibility, value);
+    }
+
+    public Visibility ArrowPreviewVisibility
+    {
+        get => _arrowPreviewVisibility;
+        set => SetField(ref _arrowPreviewVisibility, value);
+    }
+    
+    public Arrow ArrowPreview
+    {
+        get => _arrowPreview;
+        set => SetField(ref _arrowPreview, value);
     }
 
     #region IPropertyChanged Implementation

@@ -20,6 +20,7 @@
     <SolidColorBrush x:Key="TileLastMove" Color="#80ffff33" />
     <SolidColorBrush x:Key="TileHighlight" Color="#8000ccff" />
     <SolidColorBrush x:Key="TileCheck" Color="#cceb6150" />
+    <SolidColorBrush x:Key="ArrowColor" Color="#eb6150" />
 
     <Style x:Key="ButtonToolbarStyle" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="{StaticResource BackgroundButton}" />
