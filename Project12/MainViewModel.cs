@@ -236,6 +236,7 @@ public class MainViewModel : INotifyPropertyChanged
         {
             ClearTileLastMove();
             ClearTileCheck();
+            ClearTileHint();
         }
         
         if (isBackward || move.From == Position.None || move.To == Position.None)
