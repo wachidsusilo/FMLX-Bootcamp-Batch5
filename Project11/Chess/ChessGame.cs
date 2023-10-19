@@ -153,7 +153,7 @@ public class ChessGame
     /// </returns>
     public Piece? FindPieceById(int pieceId)
     {
-        return pieceId < 16
+        return pieceId < _board.GetPieceCount(PieceColor.White)
             ? _pieces[PieceColor.White].Find(piece => piece.Id == pieceId)
             : _pieces[PieceColor.Black].Find(piece => piece.Id == pieceId);
     }
